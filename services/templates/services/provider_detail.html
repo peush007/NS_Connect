@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="padding: 3rem 1.5rem;">
+
+    <!-- Profile Header -->
+    <div class="card" style="margin-bottom: 2rem; padding: 2rem;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+                <h1 style="font-size:2.5rem; font-weight:700;">
+                    {{ provider.full_name }}
+                    {% if provider.is_approved %}
+                    <span
+                        style="background:#dcfce7; color:#16a34a; padding:4px 10px; border-radius:20px; font-size:12px;">
+                        ✓ Verified
+                    </span>
+                    {% endif %}
+                </h1>
+                <p style="color:var(--primary-color); font-weight:600;">
+                    {{ provider.service_category.name }}
+                </p>
+            </div>
+
+            {% if provider.phone_number %}
+            <div>
+                <a href="tel:{{ provider.phone_number }}" class="btn btn-outline">📞 Call</a>
+                <a href="https://wa.me/{{ provider.phone_number }}" target="_blank" class="btn btn-primary"
+                    style="background:#25D366;">
+                    💬 WhatsApp
+                </a>
+            </div>
+            {% endif %}
+        </div>
+
+        <hr>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.5rem;">
+            <div>
+                <strong>Experience</strong><br>
+                {{ provider.experience }}
+            </div>
+            <div>
+                <strong>Pricing</strong><br>
+                {{ provider.pricing }}
+            </div>
+            <div>
+                <strong>Location</strong><br>
+                {% if provider.village_or_area or provider.district %}
+                <p style="margin:0; line-height:1.6;">
+                    {% if provider.address %}{{ provider.address }},<br>{% endif %}
+                    {% if provider.village_or_area %}{{ provider.village_or_area }},{% endif %}
+                    {% if provider.post_office %}{{ provider.post_office }},{% endif %}
+                    {% if provider.district %}{{ provider.district }},{% endif %}
+                    {% if provider.state %}{{ provider.state }}{% endif %}
+                    {% if provider.pincode %} - {{ provider.pincode }}{% endif %}
+                </p>
+                {% elif provider.address %}
+                {{ provider.address }}
+                {% elif provider.latitude and provider.longitude %}
+                {{ provider.latitude|floatformat:4 }}, {{ provider.longitude|floatformat:4 }}
+                {% else %}
+                Not specified
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:2fr 1fr; gap:2rem;">
+
+        <!-- Reviews -->
+        <div>
+            <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;">
+                Client Reviews
+            </h3>
+
+            {% if provider.reviews.all %}
+            {% for review in provider.reviews.all %}
+            <div class="card" style="margin-bottom: 1rem;">
+                <strong>{{ review.user.username }}</strong>
+
+                <div style="color: var(--accent-color); letter-spacing: 2px;">
+                    {% for i in "12345"|make_list %}
+                    {% if forloop.counter <= review.rating %} ★ {% else %} ☆ {% endif %} {% endfor %} </div>
+
+                        <p>{{ review.comment }}</p>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p>No reviews yet.</p>
+                {% endif %}
+
+
+                {% if can_review %}
+                <div class="card" style="margin-top:2rem;">
+                    <h4>Write a Review</h4>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button class="btn btn-primary" type="submit">Submit Review</button>
+                    </form>
+                </div>
+                {% elif user_review %}
+                <div class="card" style="margin-top:2rem; background:#eff6ff;">
+                    ✓ You have already reviewed this provider
+                </div>
+                {% elif not user.is_authenticated %}
+                <div class="card" style="margin-top:2rem;">
+                    <a href="{% url 'login' %}">Log in</a> to leave a review
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Map -->
+            <div>
+                <div class="card">
+                    <h4>Service Area</h4>
+                    <div id="provider-map" style="height:300px;"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            {% if provider.latitude and provider.longitude %}
+            const lat = {{ provider.latitude|floatformat:6 }};
+        const lng = {{ provider.longitude|floatformat:6 }};
+
+        const map = L.map("provider-map").setView([lat, lng], 13);
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: "&copy; OpenStreetMap"
+        }).addTo(map);
+
+        L.marker([lat, lng]).addTo(map)
+            .bindPopup("{{ provider.full_name|escapejs }}")
+            .openPopup();
+        {% else %}
+        document.getElementById("provider-map").innerHTML =
+            "<div style='padding:1rem;text-align:center;'>Location not available</div>";
+        {% endif %}
+        });
+    </script>
+    {% endblock %}

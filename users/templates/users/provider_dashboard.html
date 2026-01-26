@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="padding: 4rem 2rem; text-align: center;">
+    <div class="card" style="display: inline-block; max-width: 600px; padding: 3rem;">
+        <h1 style="font-size: 2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1rem;">Provider
+            Dashboard</h1>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+            Welcome, <strong>{{ user.username }}</strong>! This is where you will manage your service profile.
+        </p>
+
+        {% if not user.provider_profile.is_approved %}
+        <div
+            style="background-color: #fff3cd; color: #856404; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; border: 1px solid #ffeeba;">
+            <strong>⚠️ Account Pending Approval</strong><br>
+            Your provider account is currently under review by our admin team. Once approved, your profile will be
+            visible to customers.
+        </div>
+        {% else %}
+        <div
+            style="background-color: #d4edda; color: #155724; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; border: 1px solid #c3e6cb;">
+            <strong>✅ Account Active</strong><br>
+            Your profile is live and visible to customers!
+        </div>
+        {% endif %}
+
+        <div
+            style="background-color: #eff6ff; color: var(--primary-color); padding: 1rem; border-radius: var(--radius-md); font-weight: 500;">
+            🚧 Dashboard Construction in Progress (Phase 3)
+        </div>
+
+        <div style="margin-top: 2rem;">
+            <a href="{% url 'home' %}" class="btn btn-outline">Go to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

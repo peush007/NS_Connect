@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="padding: 3rem 1.5rem;">
+    <div class="flex justify-between items-center" style="margin-bottom: 2rem;">
+        <h1 style="font-size: 2rem; font-weight: 700;">
+            {% if selected_category %}
+            Providers for Category ID: {{ selected_category }}
+            {% else %}
+            All Service Providers
+            {% endif %}
+        </h1>
+        <span style="color: var(--text-secondary);">
+            {{ providers|length }} result(s) found
+        </span>
+    </div>
+
+    <div class="grid" style="grid-template-columns: 280px 1fr; gap: 2rem;">
+        <!-- Filter Sidebar -->
+        <aside class="card" style="height: fit-content;">
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1.5rem;">Filters</h3>
+            <form method="get" action=".">
+                <!-- Keep existing lat/lon if present -->
+                <input type="hidden" name="lat" value="{{ lat }}">
+                <input type="hidden" name="lon" value="{{ lon }}">
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label
+                        style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; font-weight: 500;">Category</label>
+                    <select name="category"
+                        style="width: 100%; padding: 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                        <option value="">All Categories</option>
+
+                        {% for service in services %}
+                        <option value="{{ service.id }}">{{ service.name }}</option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; font-weight: 500;">Radius:
+                        {{ radius }}km</label>
+                    <input type="range" name="radius" min="5" max="200" value="{{ radius }}"
+                        oninput="this.nextElementSibling.value = this.value" style="width: 100%;">
+                    <output>{{ radius }}</output> km
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Apply Filters</button>
+            </form>
+        </aside>
+
+        <!-- Results Grid -->
+        <div class="grid"
+            style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; align-content: start;">
+            {% for provider in providers %}
+            <div class="card">
+                <div class="flex justify-between items-start" style="margin-bottom: 1rem;">
+                    <div>
+                        <div class="flex items-center gap-4" style="margin-bottom: 0.25rem;">
+                            <h3 style="font-size: 1.125rem; font-weight: 600;">{{ provider.full_name }}</h3>
+                            {% if provider.is_approved %}
+                            <span
+                                style="background: #dcfce7; color: #16a34a; padding: 0.125rem 0.5rem; border-radius: 999px; font-size: 0.625rem; font-weight: 700; text-transform: uppercase;">✓
+                                Verified</span>
+                            {% endif %}
+                        </div>
+                        <span style="font-size: 0.875rem; color: var(--text-secondary);">{{ provider.service_category.name }}</span>
+                    </div>
+                    {% if provider.distance %}
+                    <span
+                        style="background: #ecfdf5; color: var(--success-color); padding: 0.25rem 0.5rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600;">
+                        {{ provider.distance }} km
+                    </span>
+                    {% endif %}
+                </div>
+
+                <div style="margin-bottom: 1rem; font-size: 0.875rem; color: var(--text-secondary);">
+                    <div class="flex items-center gap-4" style="margin-bottom: 0.5rem;">
+                        <span>💼 {{ provider.experience }}</span>
+                        <span>💲 {{ provider.pricing }}</span>
+                    </div>
+                    {% if provider.phone_number %}
+                    <div style="margin-top: 0.5rem;">
+                        <span>📞 {{ provider.phone_number }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Contact Buttons -->
+                <div class="flex gap-4" style="margin-bottom: 0.75rem;">
+                    {% if provider.phone_number %}
+                    <a href="tel:{{ provider.phone_number }}" class="btn btn-outline"
+                        style="flex: 1; font-size: 0.875rem;">📞 Call</a>
+                    <a href="https://wa.me/{{ provider.phone_number }}" target="_blank" class="btn btn-primary"
+                        style="flex: 1; font-size: 0.875rem; background: #25D366; border-color: #25D366;">💬
+                        WhatsApp</a>
+                    {% endif %}
+                </div>
+
+                <a href="{% url 'provider_detail' provider.pk %}" class="btn btn-outline" style="width: 100%;">View
+                    Profile</a>
+            </div>
+            {% empty %}
+            <div
+                style="grid-column: 1 / -1; text-align: center; padding: 4rem; background: var(--surface-color); border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
+                <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">No providers found</h3>
+                <p style="color: var(--text-secondary);">Try adjusting your search filters or location.</p>
+                <a href="{% url 'home' %}" class="btn btn-primary" style="margin-top: 1.5rem;">Back Home</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

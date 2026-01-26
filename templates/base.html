@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nearby Services Connect</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <!-- Leaflet.js for Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        /* Minimal reset for base template specific overrides */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <header class="main-header flex items-center">
+        <div class="container flex items-center justify-between" style="width: 100%;">
+            <a href="{% url 'home' %}" class="logo">
+                NS<span style="color: var(--text-primary)">Connect</span>
+            </a>
+
+            <nav class="flex items-center gap-8">
+                <a href="{% url 'home' %}" class="nav-link">Home</a>
+                <a href="{% url 'service_search' %}" class="nav-link">Find Services</a>
+                <!-- Auth Links -->
+                <div class="flex items-center gap-4 ml-4">
+                    {% if user.is_authenticated %}
+                    <span style="font-size: 0.875rem; color: var(--text-secondary);">Hi, {{ user.username }}</span>
+                    <a href="{% url 'logout' %}" class="btn btn-outline"
+                        style="padding: 0.4rem 0.8rem; font-size: 0.875rem;">Log Out</a>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="nav-link">Log In</a>
+                    <a href="{% url 'register' %}" class="btn btn-primary">Sign Up</a>
+                    {% endif %}
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer
+        style="background-color: var(--surface-color); padding: 3rem 0; border-top: 1px solid var(--border-color); margin-top: auto;">
+        <div class="container">
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
+                <div>
+                    <h5 style="margin-bottom: 1rem; color: var(--text-primary); font-weight: 700;">NS Connect</h5>
+                    <p style="color: var(--text-secondary);">Connecting you with trusted local professionals.</p>
+                </div>
+                <div>
+                    <h5 style="margin-bottom: 1rem; color: var(--text-primary); font-weight: 600;">Platform</h5>
+                    <ul style="color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.5rem;">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">How it Works</a></li>
+                        <li><a href="#">Pricing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 style="margin-bottom: 1rem; color: var(--text-primary); font-weight: 600;">Support</h5>
+                    <ul style="color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.5rem;">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div
+                style="margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color); text-align: center; color: var(--text-secondary);">
+                &copy; {% now "Y" %} Nearby Services Connect. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Simple Theme Toggle Logic check (Future implementation)
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+            // document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    </script>
+</body>
+
+</html>

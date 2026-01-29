@@ -7,7 +7,7 @@ class SinglePasswordUserCreationForm(forms.ModelForm):
     password = forms.CharField(
         label="Password",
         strip=False,
-        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}),
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
         help_text="Required. 8+ characters."
     )
     # No password_confirm field
@@ -16,8 +16,8 @@ class SinglePasswordUserCreationForm(forms.ModelForm):
         model = CustomUser
         fields = ('username', 'email') # Removed 'role' from fields if we set it manually in view
         widgets = {
-            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email (Optional)'}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
         }
 
     def save(self, commit=True):
@@ -33,13 +33,13 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ('username', 'email', 'role')
         widgets = {
             'role': forms.Select(attrs={'class': 'form-select'}),
-            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email (Optional)'}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
         }
 
 class CustomAuthenticationForm(AuthenticationForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
 class ProviderProfileForm(forms.ModelForm):
     class Meta:
@@ -50,15 +50,15 @@ class ProviderProfileForm(forms.ModelForm):
             'experience', 'pricing'
         ]
         widgets = {
-            'full_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Business/Full Name'}),
+            'full_name': forms.TextInput(attrs={'class': 'form-control'}),
             'service_category': forms.Select(attrs={'class': 'form-select'}),
-            'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
-            'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'House No, Street'}),
-            'village_or_area': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Village / Area'}),
-            'post_office': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Post Office'}),
-            'district': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'District'}),
-            'state': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'State'}),
-            'pincode': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Pincode'}),
-            'experience': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. 5 years'}),
-            'pricing': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. $50/hr or Negotiable'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'village_or_area': forms.TextInput(attrs={'class': 'form-control'}),
+            'post_office': forms.TextInput(attrs={'class': 'form-control'}),
+            'district': forms.TextInput(attrs={'class': 'form-control'}),
+            'state': forms.TextInput(attrs={'class': 'form-control'}),
+            'pincode': forms.TextInput(attrs={'class': 'form-control'}),
+            'experience': forms.TextInput(attrs={'class': 'form-control'}),
+            'pricing': forms.TextInput(attrs={'class': 'form-control'}),
         }

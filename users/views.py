@@ -24,11 +24,11 @@ def register_provider_view(request):
             profile_form.save_m2m()
             
             # success message with explicit approval info
-            messages.success(request, "Registration Successful! Your account is pending Admin Approval. Once approved, your services will be listed.")
+            messages.success(request, "Your registration request has been sent to the admin. Once the admin approves your request, your profile will be visible to users.")
             
-            # Log usage but redirect to home as requested
+            # Log usage but redirect to dashboard as requested
             login(request, user)
-            return redirect('home')
+            return redirect('provider_dashboard')
     else:
         user_form = SinglePasswordUserCreationForm()
         profile_form = ProviderProfileForm()
@@ -46,7 +46,7 @@ def register_view(request):
             login(request, user)
             if user.role == 'provider':
                 return redirect('provider_dashboard')
-            return redirect('home')
+            return redirect('user_dashboard')
     else:
         form = CustomUserCreationForm()
     return render(request, 'users/register.html', {'form': form})
@@ -59,7 +59,7 @@ def login_view(request):
             login(request, user)
             if user.role == 'provider':
                 return redirect('provider_dashboard')
-            return redirect('home')
+            return redirect('user_dashboard')
     else:
         form = CustomAuthenticationForm()
     return render(request, 'users/login.html', {'form': form})
@@ -71,4 +71,18 @@ def logout_view(request):
 
 @login_required
 def provider_dashboard_view(request):
-    return render(request, 'users/provider_dashboard.html')
+    if request.user.role != 'provider':
+        return redirect('user_dashboard')
+    
+    try:
+        profile = request.user.provider_profile
+    except ProviderProfile.DoesNotExist:
+        profile = None
+        
+    return render(request, 'users/provider_dashboard.html', {'profile': profile})
+
+@login_required
+def user_dashboard_view(request):
+    if request.user.role == 'provider':
+        return redirect('provider_dashboard')
+    return render(request, 'users/user_dashboard.html')

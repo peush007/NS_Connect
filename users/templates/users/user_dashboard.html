@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="padding: 4rem 2rem; max-width: 800px; margin: 0 auto;">
+    <div class="dashboard-header" style="text-align: center; margin-bottom: 3rem;">
+        <h1 style="font-size: 2.5rem; color: var(--text-primary); margin-bottom: 1rem;">User Dashboard</h1>
+        <p style="font-size: 1.1rem; color: var(--text-secondary);">
+            Welcome back, <strong>{{ request.user.first_name|default:request.user.username }}</strong>!
+        </p>
+    </div>
+
+    <div class="dashboard-grid"
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+
+        <!-- Find Services Card -->
+        <div class="card"
+            style="padding: 2rem; border: 1px solid #e5e7eb; border-radius: 8px; transition: transform 0.2s;">
+            <div style="font-size: 2.5rem; margin-bottom: 1rem;">🔍</div>
+            <h3 style="margin-bottom: 0.5rem; color: var(--text-primary);">Find Services</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                Looking for help? Browse local providers near you.
+            </p>
+            <a href="{% url 'home' %}" class="btn btn-primary"
+                style="display: inline-block; width: 100%; text-align: center;">Browse Providers</a>
+        </div>
+
+        <!-- My Profile Card -->
+        <div class="card"
+            style="padding: 2rem; border: 1px solid #e5e7eb; border-radius: 8px; transition: transform 0.2s;">
+            <div style="font-size: 2.5rem; margin-bottom: 1rem;">👤</div>
+            <h3 style="margin-bottom: 0.5rem; color: var(--text-primary);">My Profile</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                Update your personal information and settings.
+            </p>
+            <button class="btn btn-outline" style="width: 100%;" disabled>Edit Profile (Coming Soon)</button>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

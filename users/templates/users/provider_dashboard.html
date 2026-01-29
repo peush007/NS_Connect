@@ -1,37 +1,55 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container" style="padding: 4rem 2rem; text-align: center;">
-    <div class="card" style="display: inline-block; max-width: 600px; padding: 3rem;">
-        <h1 style="font-size: 2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1rem;">Provider
-            Dashboard</h1>
-        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
-            Welcome, <strong>{{ user.username }}</strong>! This is where you will manage your service profile.
+<div class="container" style="padding: 4rem 2rem; max-width: 800px; margin: 0 auto;">
+    <div class="dashboard-header" style="text-align: center; margin-bottom: 3rem;">
+        <h1 style="font-size: 2.5rem; color: var(--text-primary); margin-bottom: 1rem;">Provider Dashboard</h1>
+        <p style="font-size: 1.1rem; color: var(--text-secondary);">
+            Welcome, <strong>{{ request.user.first_name|default:request.user.username }}</strong>
         </p>
+    </div>
 
-        {% if not user.provider_profile.is_approved %}
-        <div
-            style="background-color: #fff3cd; color: #856404; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; border: 1px solid #ffeeba;">
-            <strong>⚠️ Account Pending Approval</strong><br>
-            Your provider account is currently under review by our admin team. Once approved, your profile will be
-            visible to customers.
+    <div class="dashboard-content">
+        {% if profile.is_approved %}
+        <!-- APPROVED STATE -->
+        <div class="status-card approved"
+            style="background-color: #d1fae5; border: 1px solid #10b981; border-radius: 8px; padding: 2rem; text-align: center; margin-bottom: 2rem;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+            <h3 style="color: #065f46; margin-bottom: 0.5rem;">Approved</h3>
+            <p style="color: #047857; font-size: 1.1rem;">Your profile is now visible to users</p>
         </div>
+
+        <!-- Dashboard Actions (Visible only when approved) -->
+        <div class="provider-actions"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            <!-- Placeholder for future dashboard widgets -->
+            <div class="card" style="padding: 1.5rem; border: 1px solid #e5e7eb; border-radius: 8px;">
+                <h4 style="margin-bottom: 1rem;">My Profile</h4>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">View and edit your service details.</p>
+                <a href="#" class="btn btn-primary" style="display: inline-block; width: 100%;">Edit Profile</a>
+            </div>
+
+            <div class="card" style="padding: 1.5rem; border: 1px solid #e5e7eb; border-radius: 8px;">
+                <h4 style="margin-bottom: 1rem;">Requests</h4>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Check incoming service requests.</p>
+                <span class="badge"
+                    style="background: #e5e7eb; color: #374151; padding: 0.25rem 0.75rem; border-radius: 999px;">No new
+                    requests</span>
+            </div>
+        </div>
+
         {% else %}
-        <div
-            style="background-color: #d4edda; color: #155724; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; border: 1px solid #c3e6cb;">
-            <strong>✅ Account Active</strong><br>
-            Your profile is live and visible to customers!
+        <!-- PENDING STATE -->
+        <div class="status-card pending"
+            style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 2rem; text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">⏳</div>
+            <h3 style="color: #92400e; margin-bottom: 0.5rem;">Pending Approval</h3>
+            <p style="color: #b45309; font-size: 1.1rem;">Your request has been sent to admin</p>
+            <div style="margin-top: 1.5rem; font-size: 0.9rem; color: #78350f;">
+                Please wait while we verify your details. You will access the full dashboard once approved.
+            </div>
         </div>
         {% endif %}
-
-        <div
-            style="background-color: #eff6ff; color: var(--primary-color); padding: 1rem; border-radius: var(--radius-md); font-weight: 500;">
-            🚧 Dashboard Construction in Progress (Phase 3)
-        </div>
-
-        <div style="margin-top: 2rem;">
-            <a href="{% url 'home' %}" class="btn btn-outline">Go to Home</a>
-        </div>
     </div>
 </div>
 {% endblock %}

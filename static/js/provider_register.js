@@ -18,15 +18,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     inputs.forEach(input => {
-        // Initial check
-        updateLabelState(input);
+        // Function to check state
+        const check = () => updateLabelState(input);
 
-        // On change/input
-        input.addEventListener('input', () => updateLabelState(input));
-        input.addEventListener('change', () => updateLabelState(input)); // For selects
+        // Events
+        input.addEventListener('input', check);
+        input.addEventListener('change', check);
+        input.addEventListener('blur', check);
+        input.addEventListener('focus', check);
 
-        // Fix for autofill issues
-        setTimeout(() => updateLabelState(input), 200);
+        // Check repeatedly on load to catch autofill
+        check();
+        setTimeout(check, 100);
+        setTimeout(check, 500);
+        setTimeout(check, 1000);
     });
 
 

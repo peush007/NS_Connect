@@ -24,6 +24,10 @@ def haversine(lat1, lon1, lat2, lon2):
     return R * c
 
 def service_search(request):
+    # Restrict provider access
+    if request.user.is_authenticated and getattr(request.user, 'role', '') == 'provider':
+        return redirect('provider_dashboard')
+
     lat = request.GET.get('lat')
     lon = request.GET.get('lon')
     category_id = request.GET.get('category')

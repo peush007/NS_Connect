@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="card" style="max_width: 800px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h1 style="font-size: 2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1rem;">Contact
+                    Us</h1>
+                <p style="color: var(--text-secondary);">We'd love to hear from you. Get in touch with us through any of
+                    the channels below.</p>
+            </div>
+
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+                <!-- Phone -->
+                <div
+                    style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 1.5rem; background-color: var(--background-color); border-radius: 0.5rem;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">📱</div>
+                    <h3
+                        style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary);">
+                        Phone</h3>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <div>
+                            <span style="color: var(--text-secondary); font-size: 0.9rem;">Primary:</span>
+                            <a href="tel:9797739111"
+                                style="color: var(--primary-color); font-weight: 500;">9797739111</a>
+                        </div>
+                        <div>
+                            <span style="color: var(--text-secondary); font-size: 0.9rem;">Secondary:</span>
+                            <a href="tel:9601710578"
+                                style="color: var(--primary-color); font-weight: 500;">9601710578</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div
+                    style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 1.5rem; background-color: var(--background-color); border-radius: 0.5rem;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">✉️</div>
+                    <h3
+                        style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary);">
+                        Email</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Our friendly team is here to help.
+                    </p>
+                    <a href="mailto:contact@nsconnect.com"
+                        style="color: var(--primary-color); font-weight: 500;">ABC@nsconnect.com</a>
+                </div>
+
+                <!-- Socials -->
+                <div
+                    style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 1.5rem; background-color: var(--background-color); border-radius: 0.5rem; grid-column: 1 / -1;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">🌐</div>
+                    <h3
+                        style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary);">
+                        Social Media</h3>
+                    <div style="display: flex; gap: 1.5rem; justify-content: center; margin-top: 0.5rem;">
+                        <a href="https://www.instagram.com/peush_khajuria_13/" target="_blank" rel="noopener noreferrer"
+                            style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); text-decoration: none; padding: 0.5rem 1rem; background-color: white; border: 1px solid var(--border-color); border-radius: 0.5rem; transition: all 0.2s;">
+                            <span>📷</span> Instagram
+                        </a>
+                        <a href="https://www.linkedin.com/in/peush-khajuria/" target="_blank" rel="noopener noreferrer"
+                            style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); text-decoration: none; padding: 0.5rem 1rem; background-color: white; border: 1px solid var(--border-color); border-radius: 0.5rem; transition: all 0.2s;">
+                            <span>💼</span> LinkedIn
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

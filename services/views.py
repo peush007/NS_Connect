@@ -10,6 +10,9 @@ def home(request):
     services = Service.objects.all()
     return render(request, 'home.html', {'services': services})
 
+def contact(request):
+    return render(request, 'contact.html')
+
 def haversine(lat1, lon1, lat2, lon2):
     R = 6371  # Earth radius in km
     dlat = math.radians(lat2 - lat1)

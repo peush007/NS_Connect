@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import CustomUserCreationForm, CustomAuthenticationForm, ProviderProfileForm
+from django.contrib import messages
+from .forms import CustomUserCreationForm, CustomAuthenticationForm, ProviderProfileForm, SinglePasswordUserCreationForm
 from .models import ProviderProfile
 
 def register_provider_view(request):
     if request.method == 'POST':
-        user_form = CustomUserCreationForm(request.POST)
+        # Use simple single-password form
+        user_form = SinglePasswordUserCreationForm(request.POST)
         profile_form = ProviderProfileForm(request.POST)
         
         if user_form.is_valid() and profile_form.is_valid():
@@ -21,10 +23,14 @@ def register_provider_view(request):
             
             profile_form.save_m2m()
             
+            # success message with explicit approval info
+            messages.success(request, "Registration Successful! Your account is pending Admin Approval. Once approved, your services will be listed.")
+            
+            # Log usage but redirect to home as requested
             login(request, user)
-            return redirect('provider_dashboard')
+            return redirect('home')
     else:
-        user_form = CustomUserCreationForm()
+        user_form = SinglePasswordUserCreationForm()
         profile_form = ProviderProfileForm()
         
     return render(request, 'users/register_provider.html', {

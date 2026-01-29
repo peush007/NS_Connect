@@ -2,6 +2,31 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import CustomUser, ProviderProfile
 
+# NEW: Form with only one password field
+class SinglePasswordUserCreationForm(forms.ModelForm):
+    password = forms.CharField(
+        label="Password",
+        strip=False,
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}),
+        help_text="Required. 8+ characters."
+    )
+    # No password_confirm field
+
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'email') # Removed 'role' from fields if we set it manually in view
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email (Optional)'}),
+        }
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
+
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser

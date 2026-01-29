@@ -40,6 +40,7 @@
 
             <nav class="flex items-center gap-8">
                 <a href="{% url 'home' %}" class="nav-link">Home</a>
+                <a href="{% url 'contact' %}" class="nav-link">Contact</a>
                 <a href="{% url 'service_search' %}" class="nav-link">Find Services</a>
                 <!-- Auth Links -->
                 <div class="flex items-center gap-4 ml-4">
@@ -95,6 +96,9 @@
         </div>
     </footer>
 
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Scripts -->
     <script>
         // Simple Theme Toggle Logic check (Future implementation)
@@ -102,6 +106,21 @@
         if (prefersDark) {
             // document.documentElement.setAttribute('data-theme', 'dark');
         }
+
+        // Check for Django Messages and show SweetAlert
+        {% if messages %}
+        {% for message in messages %}
+        Swal.fire({
+            title: "{% if message.tags == 'success' %}Success!{% elif message.tags == 'error' %}Error{% else %}Notice{% endif %}",
+            text: "{{ message }}",
+            icon: "{% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% else %}info{% endif %}",
+            confirmButtonText: 'Great!',
+            confirmButtonColor: '#2DD4BF', // Brand Teal
+            background: '#fff',
+            color: '#1a1a1a'
+        });
+        {% endfor %}
+        {% endif %}
     </script>
 </body>
 

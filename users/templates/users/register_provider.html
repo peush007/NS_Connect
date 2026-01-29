@@ -1,33 +1,107 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-<div class="container" style="padding: 4rem 2rem; max-width: 800px;">
-    <div class="card" style="padding: 3rem;">
-        <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 2rem; text-align: center;">Register as a Provider
-        </h2>
+<link rel="stylesheet" href="{% static 'css/provider_register.css' %}?v={% now 'U' %}">
 
-        <form method="post">
-            {% csrf_token %}
-
-            <div style="margin-bottom: 2rem;">
-                <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Account Information</h3>
-                {{ user_form.as_p }}
+<div class="provider-register-container">
+    <div class="split-layout">
+        <!-- Left Side: Vibrant/Colorful -->
+        <div class="register-intro-panel">
+            <div class="intro-content">
+                <h1>Hello!</h1>
+                <h2>Join our professional network</h2>
+                <div class="intro-decoration-lines"></div>
             </div>
+        </div>
 
-            <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <!-- Right Side: Wizard Form -->
+        <div class="register-form-panel">
+            <div class="form-wrapper">
 
-            <div style="margin-bottom: 2rem;">
-                <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Business Profile</h3>
-                {{ profile_form.as_p }}
+                <!-- Stepper UI -->
+                <div class="stepper-wrapper">
+                    <div class="stepper-item active" data-step="1">
+                        <div class="step-counter">1</div>
+                        <div class="step-name">Account</div>
+                    </div>
+                    <div class="stepper-line"></div>
+                    <div class="stepper-item" data-step="2">
+                        <div class="step-counter">2</div>
+                        <div class="step-name">Business</div>
+                    </div>
+                </div>
+
+                <h2 class="form-title mobile-title">Create Account</h2>
+
+                <form method="post" class="register-form" id="wizardForm">
+                    {% csrf_token %}
+
+                    <!-- Step 1: Account Info -->
+                    <div class="wizard-step active" id="step1">
+                        <h3 class="step-title">Let's set up your login details</h3>
+
+                        <div class="input-group">
+                            {{ user_form.username }}
+                            <label for="{{ user_form.username.id_for_label }}">Username</label>
+                            {% if user_form.username.help_text %}
+                            <span class="helptext">{{ user_form.username.help_text }}</span>
+                            {% endif %}
+                            {{ user_form.username.errors }}
+                        </div>
+
+                        <div class="input-group">
+                            {{ user_form.email }}
+                            <label for="{{ user_form.email.id_for_label }}">Email Address</label>
+                            {{ user_form.email.errors }}
+                        </div>
+
+                        <div class="input-group">
+                            {{ user_form.password }}
+                            <label for="{{ user_form.password.id_for_label }}">Password</label>
+                            {% if user_form.password.help_text %}
+                            <span class="helptext">Minimum 8 characters</span>
+                            {% endif %}
+                            {{ user_form.password.errors }}
+                        </div>
+
+                        <div class="button-row">
+                            <button type="button" class="btn-next" onclick="nextStep()">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Business Profile -->
+                    <div class="wizard-step" id="step2">
+                        <h3 class="step-title">Tell us about your business</h3>
+
+                        <!-- Loop through profile form manually to apply floating label style, 
+                             or wrap standard output - Manual provides best control for the floating effect -->
+                        {% for field in profile_form %}
+                        <div class="input-group">
+                            {{ field }}
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {% if field.help_text %}
+                            <span class="helptext">{{ field.help_text }}</span>
+                            {% endif %}
+                            {{ field.errors }}
+                        </div>
+                        {% endfor %}
+
+                        <div class="button-row dual">
+                            <button type="button" class="btn-back" onclick="prevStep()">Back</button>
+                            <button type="submit" class="btn-submit">Complete Registration</button>
+                        </div>
+                    </div>
+
+                </form>
+
+                <div class="register-footer">
+                    <p>Already have an account? <a href="{% url 'login' %}" class="login-link">Log in</a></p>
+                </div>
             </div>
-
-            <button type="submit" class="btn btn-primary"
-                style="width: 100%; padding: 1rem; font-size: 1.1rem;">Register Business</button>
-        </form>
-
-        <div style="margin-top: 1.5rem; text-align: center;">
-            <p>Already have an account? <a href="{% url 'login' %}">Log in</a></p>
         </div>
     </div>
 </div>
+
+<script src="{% static 'js/provider_register.js' %}?v={% now 'U' %}"></script>
 {% endblock %}

@@ -12,7 +12,7 @@ class CustomUser(AbstractUser):
         return self.username
 
 class ProviderProfile(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='provider_profile')
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='provider_profile', null=True, blank=True)
     full_name = models.CharField(max_length=255, default='')
     service_category = models.ForeignKey('services.Service', on_delete=models.SET_NULL, null=True, related_name='providers_category')
     address = models.CharField(max_length=255, default='', blank=True, help_text="House No, Street, or Colony")
@@ -30,4 +30,5 @@ class ProviderProfile(models.Model):
     services = models.ManyToManyField('services.Service', related_name='providers', blank=True)
 
     def __str__(self):
-        return f"Provider: {self.user.username} - {self.full_name}"
+        username = self.user.username if self.user else "Unassigned"
+        return f"Provider: {username} - {self.full_name}"

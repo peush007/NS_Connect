@@ -1,43 +1,135 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container"
-    style="display: flex; justify-content: center; align-items: center; min-height: calc(100vh - var(--header-height)); padding: 2rem;">
-    <div class="card" style="width: 100%; max-width: 450px; padding: 2.5rem;">
-        <h2 style="text-align: center; margin-bottom: 2rem; font-weight: 700; color: var(--text-primary);">Welcome Back
-        </h2>
+<div style="min-height: calc(100vh - var(--header-height)); display: flex; width: 100%; background-color: var(--background-color);">
 
-        <form method="post" class="flex" style="flex-direction: column; gap: 1.5rem;">
-            {% csrf_token %}
+    <!-- Left Side: Interactive Graphic/Branding Area -->
+    <div class="split-screen-graphic" style="position: relative; overflow: hidden; background: linear-gradient(135deg, #1e1b4b, var(--secondary-color)); color: white; padding: 4rem; flex-direction: column; justify-content: center; align-items: flex-start;">
+        <!-- Abstract Animated Background -->
+        <div style="position: absolute; top: -20%; right: -20%; width: 60%; height: 60%; background: var(--primary-color); border-radius: 50%; filter: blur(100px); opacity: 0.4; animation: pulse 8s infinite alternate;"></div>
+        <div style="position: absolute; bottom: -20%; left: -20%; width: 50%; height: 50%; background: var(--accent-color); border-radius: 50%; filter: blur(80px); opacity: 0.3; animation: pulse 6s infinite alternate-reverse;"></div>
 
-            {% if form.non_field_errors %}
-            <div
-                style="background-color: #fee2e2; color: #dc2626; padding: 0.75rem; border-radius: var(--radius-sm); font-size: 0.875rem;">
-                {% for error in form.non_field_errors %}
-                {{ error }}
-                {% endfor %}
+        <div style="position: relative; z-index: 10; max-width: 500px;">
+            <div style="display: inline-flex; align-items: center; justify-content: center; width: 60px; height: 60px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 16px; margin-bottom: 2.5rem; border: 1px solid rgba(255, 255, 255, 0.2); font-size: 2rem;">
+                ✨
             </div>
-            {% endif %}
+            <h1 style="font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem;">
+                Welcome Back to <br> <span style="background: linear-gradient(135deg, #a5b4fc, #f472b6); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">NSConnect.</span>
+            </h1>
+            <p style="font-size: 1.25rem; line-height: 1.6; color: #cbd5e1; margin-bottom: 3rem;">
+                Log in to discover top-rated local professionals, manage your projects, and leave reviews for services you love.
+            </p>
+            
+            <!-- Dynamic review card float -->
+            <div style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 1.5rem; border-radius: var(--radius-lg); max-width: 400px; transform: rotate(-2deg); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); animation: float 6s ease-in-out infinite;">
+                <div style="display: flex; gap: 0.5rem; color: #fbbf24; margin-bottom: 0.75rem;">
+                    ★★★★★
+                </div>
+                <p style="font-style: italic; color: #e2e8f0; font-size: 0.9rem;">"Found an amazing plumber in literally 5 minutes. The process was so smooth and the job was perfect!"</p>
+                <div style="margin-top: 1rem; font-size: 0.8rem; font-weight: 700; color: #94a3b8;">- Sarah Jenkins, Homeowner</div>
+            </div>
+        </div>
+    </div>
 
-            {% for field in form %}
-            <div>
-                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.875rem;">{{ field.label }}</label>
-                {{ field }}
-                {% if field.errors %}
-                <div style="color: var(--danger-color); font-size: 0.875rem; margin-top: 0.25rem;">
-                    {{ field.errors.0 }}
+    <!-- Right Side: The Form -->
+    <div style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative;">
+        
+        <div style="width: 100%; max-width: 450px; background: white; padding: 3rem; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); border: 1px solid rgba(79, 70, 229, 0.1); position: relative; z-index: 10;">
+            <div style="text-align: center; margin-bottom: 2.5rem;">
+                <h2 style="font-size: 2rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem;">Log In</h2>
+                <p style="color: var(--text-secondary); font-size: 1rem;">Enter your credentials to access your account.</p>
+            </div>
+
+            <form method="post" style="display: flex; flex-direction: column; gap: 1.5rem;" class="custom-form">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                <div style="background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--danger-color); padding: 1rem; border-radius: var(--radius-md); font-size: 0.9rem; color: var(--danger-color); font-weight: 500;">
+                    {% for error in form.non_field_errors %}
+                    {{ error }}
+                    {% endfor %}
                 </div>
                 {% endif %}
+
+                {% for field in form %}
+                <div class="input-group" style="position: relative;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.875rem; color: var(--text-secondary); transition: all 0.3s;">{{ field.label }}</label>
+                    <div style="position: relative;">
+                        <!-- The raw field needs to be styled properly, assuming global.css handles input[type="text"] well, but we add a wrapper class to enhance it -->
+                        <div class="field-wrapper">
+                            {{ field }}
+                        </div>
+                    </div>
+                    {% if field.errors %}
+                    <div style="color: var(--danger-color); font-size: 0.8rem; margin-top: 0.5rem; font-weight: 500; display: flex; align-items: center; gap: 0.25rem;">
+                        <span>⚠️</span> {{ field.errors.0 }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: -0.5rem; margin-bottom: 1rem;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-secondary); cursor: pointer;">
+                        <input type="checkbox" style="width: 16px; height: 16px; accent-color: var(--primary-color);"> Remember me
+                    </label>
+                    <a href="#" style="font-size: 0.875rem; color: var(--primary-color); font-weight: 600; text-decoration: none;">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1.25rem; font-size: 1.125rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3); transition: all 0.3s; border-radius: var(--radius-md);">
+                    Log In Securely &rarr;
+                </button>
+            </form>
+
+            <div style="margin-top: 2.5rem; text-align: center; position: relative;">
+                <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border-color); z-index: 1;"></div>
+                <span style="background: white; padding: 0 1rem; position: relative; z-index: 2; font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">
+                    New to NSConnect?
+                </span>
             </div>
-            {% endfor %}
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem;">Log In</button>
-        </form>
-
-        <p style="text-align: center; margin-top: 2rem; color: var(--text-secondary); font-size: 0.875rem;">
-            Don't have an account? <a href="{% url 'register' %}"
-                style="color: var(--primary-color); font-weight: 600;">Sign up</a>
-        </p>
+            <p style="text-align: center; margin-top: 2rem; color: var(--text-secondary); font-size: 1rem;">
+                <a href="{% url 'register' %}" style="color: var(--primary-color); font-weight: 700; text-decoration: none; padding: 0.75rem 2rem; border: 2px solid rgba(79, 70, 229, 0.2); border-radius: 50px; display: inline-block; transition: all 0.3s;" onmouseover="this.style.background='rgba(79, 70, 229, 0.05)'; this.style.borderColor='var(--primary-color)';" onmouseout="this.style.background='transparent'; this.style.borderColor='rgba(79, 70, 229, 0.2)';">
+                    Create an Account
+                </a>
+            </p>
+        </div>
     </div>
 </div>
+
+<style>
+    /* Add extra styles to override django generic inputs if global.css doesn't quite hit the mark */
+    .field-wrapper input {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        border-radius: var(--radius-md);
+        border: 2px solid var(--border-color);
+        background: var(--background-color);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        outline: none;
+        color: var(--text-primary);
+    }
+    .field-wrapper input:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+        background: white;
+    }
+    .field-wrapper input::placeholder {
+        color: #94a3b8;
+    }
+    .input-group:focus-within label {
+        color: var(--primary-color);
+    }
+    
+    /* Setup Split Screen Display */
+    .split-screen-graphic {
+        display: none;
+        flex: 1;
+    }
+    @media (min-width: 900px) {
+        .split-screen-graphic {
+            display: flex;
+        }
+    }
+</style>
 {% endblock %}

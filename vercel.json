@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "nearby_services/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "nearby_services/wsgi.py"
+    }
+  ]
+}
